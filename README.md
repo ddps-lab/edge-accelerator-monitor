@@ -4,7 +4,7 @@ Accelerator-Aware Kubernetes Schedulerfor DNN Tasks on Edge Computing Environmen
 
 ## Run Docker
 ```
-sudo docker push kmubigdata/edge-accelerator-monitor:latest
+sudo docker pull kmubigdata/edge-accelerator-monitor
 
 ```
 
