@@ -2,7 +2,7 @@
 
 Accelerator-Aware Kubernetes Schedulerfor DNN Tasks on Edge Computing Environment
 
-### Install and Run Docker on Nvidia Jetson, Coral TPU Rasberry pi 4 machine(GPU)
+### Run Docker on Nvidia Jetson, Coral TPU Rasberry pi 4 machine(GPU)
 ```
 sudo apt-get remove docker docker.io containerd runc nvidia-docker2
 sudo apt-get update
