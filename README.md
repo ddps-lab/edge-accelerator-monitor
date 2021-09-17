@@ -27,6 +27,8 @@ sudo apt-get install -y kubelet kubeadm
 ```
 
 ### Run Kubernetes DaemonSet on Cluster environment
+Machine hardware data extraction available (modle, resource usage, drvier version)
+
 ```
 sudo kubectl apply -f Daemonset.yaml
 sudo kubectl get daemonset
