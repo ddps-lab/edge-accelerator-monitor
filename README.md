@@ -2,7 +2,7 @@
 
 Accelerator-Aware Kubernetes Schedulerfor DNN Tasks on Edge Computing Environment
 
-### Run Docker on Nvidia Jetson, Coral TPU on Rasberry pi 4 machine(use GPU)
+### Run Docker on Nvidia Jetson, Coral TPU Rasberry pi 4 machine(use GPU)
 ```
 sudo apt-get remove docker docker.io containerd runc nvidia-docker2
 sudo apt-get update
@@ -16,3 +16,19 @@ sudo docker pull kmubigdata/edge-accelerator-monitor
 sudo docker run -it --privileged --name [docker container name] edge-accelerator-monitor /bin/bash
 ```
 
+### Kubernetes install
+```
+sudo apt-get update && apt-get install -y apt-transport-https curl
+sudo curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+sudo echo deb http://apt.kubernetes.io/ kubernetes-xenial main > /etc/apt/sources.list.d/kubernetes.list
+
+sudo apt-get update
+sudo apt-get install -y kubelet=1.18.14-00 kubeadm=1.18.14-00
+```
+
+### Run Kubernetes DaemonSet on Cluster environment
+```
+sudo kubectl apply -f Daemonset.yaml
+sudo kubectl get daemonset
+sudo kubectl get pod -o wide
+```
