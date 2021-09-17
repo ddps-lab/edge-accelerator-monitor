@@ -4,7 +4,6 @@ ARG IMAGE_NAME=nvcr.io/nvidia/l4t-base:r32.4.3
 FROM ${DEPENDENCIES_IMAGE} as dependencies
 
 ARG VERSION_ID=18.04
-# using a smaller image doesn't save us any space as the layers are used by the other images.
 FROM ubuntu:${VERSION_ID} as qemu
 
 # install qemu for the support of building containers on host
@@ -16,9 +15,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends qemu-user-stati
 ARG VERSION_ID=18.04
 FROM arm64v8/ubuntu:${VERSION_ID}
 
-
-# TODO: Set up conditional QEMU support for those that haven't configured binfmt.service.
-# This is small overhead (3-4 MiB) and helps people fall into the pit of success.
 COPY --from=qemu /usr/bin/qemu-aarch64-static /usr/bin/qemu-aarch64-static
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -27,14 +23,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     gnupg \
     sudo \
-		usbutils 
+    usbutils 
 
 # Copy the driver pack and verify
+# https://developer.nvidia.com/embedded/linux-tegra-r32.4.3 (driver pack url)
 ARG DEPENDENCIES_IMAGE=nvidia-tx1-l4t-32.4.3:latest
 COPY Tegra210_Linux_R32.4.3_aarch64.tbz2 Jetson-210_Linux_R32.4.3_aarch64.tbz2
 RUN echo "048ed5e9f225896b86ed2d5b0ca803fa *./Jetson-210_Linux_R32.4.3_aarch64.tbz2" | md5sum -c -
 RUN tar -xpj --overwrite -f ./Jetson-210_Linux_R32.4.3_aarch64.tbz2
 RUN sed -i '/.*tar -I lbzip2 -xpmf \"${LDK_NV_TEGRA_DIR}\/config\.tbz2\".*/c\tar -I lbzip2 -xpm --overwrite -f \"${LDK_NV_TEGRA_DIR}\/config.tbz2\"' ./Linux_for_Tegra/apply_binaries.sh
+
 # pre-req for Linux_for_Tegra/nv_tegra/nv-apply-debs.sh as it tries to chroot
 COPY --from=qemu /usr/bin/qemu-aarch64-static /Linux_for_Tegra/nv_tegra/qemu-aarch64-static
 RUN sed -i '/.*	LC_ALL=C chroot . dpkg -i --path-include=\"\/usr\/share\/doc\/\*\" \"${pre_deb_list\[\@\]}\".*/c\	apt install -y --no-install-recommends \"${pre_deb_list[@]}\"' ./Linux_for_Tegra/nv_tegra/nv-apply-debs.sh
