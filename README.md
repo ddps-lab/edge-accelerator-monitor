@@ -33,4 +33,5 @@ Machine hardware data extraction available (model, resource usage, drvier versio
 sudo kubectl apply -f Daemonset.yaml
 sudo kubectl get daemonset
 sudo kubectl get pod -o wide
+sudo kubectl describe pod [pod name]
 ```
