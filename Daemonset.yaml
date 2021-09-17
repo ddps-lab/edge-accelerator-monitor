@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: edge-accelerator-monitor-daemonset
+  namespace: default
+  labels:
+    name: edge-accelerator-monitor-daemonset
+spec:
+  selector:
+    matchLabels: 
+      node-role.kubernetes.io/worker: worker 
+  template:
+    metadata:
+      labels:
+        node-role.kubernetes.io/worker: worker
+    spec:
+      containers: 
+      - name: edge-kubernetes-container
+        image: kmubigdata/edge-accelerator-monitor
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: path
+          mountPath: /driver_version
+      volumes:
+      - name : path
+        hostPath:
+          path: /etc/nv_tegra_release
+      restartPolicy: Always
