@@ -64,8 +64,8 @@ RUN ldconfig
 
 # hardware data export
 RUN echo '#!/bin/bash\n\
-cat /proc/device-tree/model >> ./node_model.txt\n\
-tegrastats  >> ./node_resource.txt &\n\
+cat /proc/device-tree/model >> ./nvidia_jetson_model.txt\n\
+tegrastats  >> ./nvidia_jetson_resource.txt &\n\
 lsusb | grep 1a6e  >> ./tpu_model.txt\n'\
 >> /command.sh
 
