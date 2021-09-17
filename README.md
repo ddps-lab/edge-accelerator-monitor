@@ -34,5 +34,5 @@ sudo kubectl apply -f Daemonset.yaml
 sudo kubectl get daemonset
 sudo kubectl get pod -o wide
 sudo kubectl describe pod [pod name]
-sudo kubectl exec -it --namespace  default [pod name] /bin/bash
+sudo kubectl exec -it --namespace default [pod name] /bin/bash
 ```
