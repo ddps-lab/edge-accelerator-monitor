@@ -13,5 +13,6 @@ sudo add-apt-repository "deb [arch=arm64] https://download.docker.com/linux/ubun
 sudo apt-get update
 sudo apt-get install containerd.io docker-ce docker-ce-cli
 sudo docker pull kmubigdata/edge-accelerator-monitor
+sudo docker run -it --privileged --name [docker container name] edge-accelerator-monitor /bin/bash
 ```
 
