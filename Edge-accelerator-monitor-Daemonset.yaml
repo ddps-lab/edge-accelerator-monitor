@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: edge-accelerator-monitor-daemonset
+  namespace: default
+  labels:
+    name: edge-accelerator-monitor-daemonset
+spec:
+  selector:
+    matchLabels: 
+      name: custom-container
+  template:
+    metadata:
+      labels:
+        name: custom-container
+    spec:
+      nodeSelector:
+        kubernetes.io/arch: arm64
+      serviceAccountName: accelerator-manager
+      volumes:
+      - name: path1
+        hostPath:
+          path: /etc/hostname
+      - name: path2
+        hostPath:
+          path: /etc/nv_tegra_release
+      - name: path3
+        hostPath:
+          path: /sys/kernel/debug/usb/devices
+      containers: 
+      - name: edge-accelerator-monitor
+        image: kmubigdata/edge-accelerator-monitor
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: path1
+          mountPath: /host_hostname
+        - name: path2
+          mountPath: /host_driver
+        - name: path3
+          mountPath: /host_devices
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+      restartPolicy: Always
