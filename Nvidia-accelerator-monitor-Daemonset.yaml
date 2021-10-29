@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: nvidia-accelerator-monitor-daemonset
+  namespace: default
+  labels:
+    name: nvidia-accelerator-monitor-daemonset
+spec:
+  selector:
+    matchLabels: 
+      name: custom-worker  
+  template:
+    metadata:
+      labels:
+        name: custom-worker 
+    spec:
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      volumes:
+      - name: path
+        hostPath: 
+          path: /etc/hostname
+      serviceAccountName: accelerator-manager
+      containers: 
+      - name: nvidia-accelerator-monitor
+        image: kmubigdata/nvidia-accelerator-monitor
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: path
+          mountPath: /host_hostname
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+      restartPolicy: Always
