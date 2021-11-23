@@ -31,7 +31,7 @@ spec:
           privileged: true
         volumeMounts:
         - name: path
-          mountPath: /host_hostname
+          mountPath: /node_name
         env:
         - name: NODE_NAME
           valueFrom:
