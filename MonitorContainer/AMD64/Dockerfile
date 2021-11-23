@@ -15,8 +15,7 @@ RUN apt-get install -y kubelet=1.18.14-00 \
     kubeadm=1.18.14-00
 RUN rm -rf gpg
 
-
-RUN mkdir /project
-COPY ./hw_data_labeling.sh /project/hw_data_labeling.sh
-RUN chmod +x /project/hw_data_labeling.sh
-CMD ["sh", "-c", "./project/hw_data_labeling.sh; sleep 3600"]
+RUN mkdir /edge-hw-monitor-labeling
+COPY ./hw_data_labeling.sh /edge-hw-monitor-labeling/hw_data_labeling.sh
+RUN chmod +x /edge-hw-monitor-labeling/hw_data_labeling.sh
+CMD ["sh", "-c", "./edge-hw-monitor-labeling/hw_data_labeling.sh; sleep 3600"]
