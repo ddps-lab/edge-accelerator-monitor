@@ -34,11 +34,11 @@ spec:
           privileged: true
         volumeMounts:
         - name: path1
-          mountPath: /host_hostname
+          mountPath: /node_name
         - name: path2
-          mountPath: /host_driver
+          mountPath: /NVIDIA_driver_version
         - name: path3
-          mountPath: /host_devices
+          mountPath: /TPU_device_ID
         env:
         - name: NODE_NAME
           valueFrom:
