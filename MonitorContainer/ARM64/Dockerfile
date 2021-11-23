@@ -2,8 +2,6 @@ ARG VERSION_ID=18.04
 ARG DEPENDENCIES_IMAGE=nvcr.io/nvidia/l4t-base:r32.4.3
 ARG IMAGE_NAME=nvcr.io/nvidia/l4t-base:r32.4.3
 FROM ${DEPENDENCIES_IMAGE} as dependencies
-
-ARG VERSION_ID=18.04
 FROM ubuntu:${VERSION_ID} as qemu
 
 # install qemu for the support of building containers on host
@@ -12,7 +10,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends qemu-user-stati
     rm -rf /var/lib/apt/lists/*
 
 # start of the real image base
-ARG VERSION_ID=18.04
 FROM arm64v8/ubuntu:${VERSION_ID}
 
 COPY --from=qemu /usr/bin/qemu-aarch64-static /usr/bin/qemu-aarch64-static
@@ -79,6 +76,6 @@ RUN ldconfig
 
 # hardware data labeling
 RUN mkdir /edge-hw-monitor-labeling
-COPY ./hw_data_labeling.sh ./edge-hw-monitor-labeling/hw_data_labeling.sh
-RUN chmod +x /edge-hw-monitor-labeling/hw_data_labeling.sh
-CMD ["sh", "-c", "./edge-hw-monitor-labeling/hw_data_labeling.sh; sleep 3600"]
+COPY ./hw-monitor-automatic-lableing.sh ./edge-hw-monitor-labeling/hw-monitor-automatic-lableing.sh
+RUN chmod +x /edge-hw-monitor-labeling/hw-monitor-automatic-lableing.sh
+CMD ["sh", "-c", "./edge-hw-monitor-labeling/hw-monitor-automatic-lableing.sh; sleep 3600"]
