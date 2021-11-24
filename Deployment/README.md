@@ -15,9 +15,9 @@ This is a file that enables the accelerator information extraction container to 
 
 ### How to apply a file
 ```
-kubectl apply -f service-account.yaml
-kubectl apply -f edge-daemonset.yaml
-kubectl apply -f nvidia-daemonset.yaml
+kubectl apply -f ServiceAccount.yaml
+kubectl apply -f ARM64-Daemonset.yaml
+kubectl apply -f AMD64-Daemonset.yaml
 ```
 ### How to check Daemonset, pod, container, label
 ```
@@ -27,7 +27,7 @@ kubectl get node --show-labels
 ```
 ### How to delete a file
 ```
-kubectl delete -f edge-daemonset.yaml
-kubectl delete -f nvidia-daemonset.yaml
-kubectl delete -f service-account.yaml
+kubectl delete -f ServiceAccount.yaml
+kubectl delete -f ARM64-Daemonset.yaml
+kubectl delete -f AMD64-Daemonset.yaml
 ```
