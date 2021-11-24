@@ -1,6 +1,6 @@
 # edge-accelerator-monitor
 
-[Accelerator-Aware Kubernetes Schedulerfor DNN Tasks on Edge Computing Environment](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/6522f6cd-1c92-4bf1-bbff-0cc7893de1a2/Accelerator-Aware_Kubernetes_Scheduler_for_DNN_Tasks_on_Edge_Computing_Environment.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20211124%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20211124T065300Z&X-Amz-Expires=86400&X-Amz-Signature=f4b48ea40372b1c7fb031e8d1984c5543c843c44af63d766470b3aa2e5063e8d&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Accelerator-Aware%2520Kubernetes%2520Scheduler%2520for%2520DNN%2520Tasks%2520on%2520Edge%2520Computing%2520Environment.pdf%22&x-id=GetObject)
+[Accelerator-Aware Kubernetes Schedulerfor DNN Tasks on Edge Computing Environment](https://edge-k8s-project.s3.amazonaws.com/Accelerator-Aware+Kubernetes+Scheduler+for+DNN+Tasks+on+Edge+Computing+Environment.pdf)
 
 
 Configure a Kubernetes cluster environment for edge accelerator hardware information extraction and automatic labeling
