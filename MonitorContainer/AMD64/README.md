@@ -1,1 +1,8 @@
+## NVIDIA Jetson TX1, TX2, Nano, Xavier and Google Coral TPU
 
+Covers NVIDIA GPU physical devices with ARM64 architecture.
+Those files are a script file and Dockerfile for extracting hardware information from containers and labeling the information automatically on nodes.
+
+```
+docker build -t [docker image name] .
+```
