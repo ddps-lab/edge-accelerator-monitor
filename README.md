@@ -1,19 +1,19 @@
 # edge-accelerator-monitor
 
-Link : Accelerator-Aware Kubernetes Schedulerfor DNN Tasks on Edge Computing Environment
+[Accelerator-Aware Kubernetes Schedulerfor DNN Tasks on Edge Computing Environment](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/6522f6cd-1c92-4bf1-bbff-0cc7893de1a2/Accelerator-Aware_Kubernetes_Scheduler_for_DNN_Tasks_on_Edge_Computing_Environment.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20211124%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20211124T065300Z&X-Amz-Expires=86400&X-Amz-Signature=f4b48ea40372b1c7fb031e8d1984c5543c843c44af63d766470b3aa2e5063e8d&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Accelerator-Aware%2520Kubernetes%2520Scheduler%2520for%2520DNN%2520Tasks%2520on%2520Edge%2520Computing%2520Environment.pdf%22&x-id=GetObject)
 
 
-## Configure a Kubernetes cluster environment for edge accelerator hardware information extraction and automatic labeling
+Configure a Kubernetes cluster environment for edge accelerator hardware information extraction and automatic labeling
 
 
 ### 1. Docker install
 ```
-apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-add-apt-repository "deb [arch=arm64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+sudo apt-get install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=arm64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
-apt-get update
-apt-get install containerd.io docker-ce docker-ce-cli
+sudo apt-get update
+sudo apt-get install -y containerd.io docker-ce docker-ce-cli
 ```
 
 ### 2. Kubernetes install
@@ -28,8 +28,8 @@ sudo apt-get install -y kubelet kubeadm
 
 ### 3. Disable kubernetes container swap,zram
 ```
-swapoff -a
-rm /etc/systemd/nvzramconfig.sh
+sudo swapoff -a
+sudo rm /etc/systemd/nvzramconfig.sh
 ```
 
 ### 4. Kubernetes cluster setting (master node)
@@ -37,10 +37,10 @@ rm /etc/systemd/nvzramconfig.sh
 Cluster api initialization on the master node and the token is issued.
 
 ```
-kubeadm init --apiserver-advertise-address=192.168.0.5 --pod-network-cidr=10.244.0.0/16 --kubernetes-version=v1.18.14
+sudo kubeadm init --apiserver-advertise-address=[master ip] --pod-network-cidr=10.244.0.0/16 --kubernetes-version=v1.18.14
 ```
 ```
-mkdir -p $HOME/.kube
+sudo mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
@@ -48,7 +48,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 How to reissue a token
 
 ```
-kubeadm token create --print-join-command
+sudo kubeadm token create --print-join-command
 ```
 
 ### 5. Kubernetes cluster setting (worker node)
@@ -56,14 +56,16 @@ kubeadm token create --print-join-command
 Join the cluster using the token value from the worker node.
 
 ```
-kubeadm join 192.168.0.5:6443 --token [token data] --discovery-token-ca-cert-hash [token hash data]
+sudo kubeadm join 192.168.0.5:6443 --token [token data] --discovery-token-ca-cert-hash [token hash data]
 ```
 
 In Google Coral TPU device, execute join after setting cgroup memory.
 
 ```
 sudo vi /boot/firmware/nobtcmd.txt
+add line >>
 cgroup_ena vv b ble=cpuset cgroup_enable=memory cgroup_memory=1 
+
 sudo reboot
 ```
 
@@ -72,24 +74,55 @@ sudo reboot
 Tasks to configure the container's network and assign an IP
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.13.0/Documentation/kube-flannel.yml
+sudo kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.13.0/Documentation/kube-flannel.yml
 ```
 
 
 ### 7. worker node role setting (master node)
 
 ```
-kubectl label node [node name] node-role.kubernetes.io/worker=worker
+sudo kubectl label node [node name] node-role.kubernetes.io/worker=worker
 ```
 
 ### 8. Kubernetes cluster setting check (master node)
 
 ```
-kubectl get nodes
+sudo kubectl get nodes
 ```
 
-### 9. separate settings (master node)
+### 9. NVIDIA GPU physical device separate settings (GPU runtime)
+
+Register nvidia-docker related repository on host
 
 ```
-kubectl get nodes
+sudo distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
+   && curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add - \
+   && curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
 ```
+
+nvidia-docker package install
+
+```
+sudo apt-get update
+sudo apt-get install -y nvidia-docker2
+```
+
+default runtime setting
+
+```
+sudo vi /etc/docker/daemon.json
+add line >>
+"default-runtime": "nvidia" 
+```
+
+docker daemon service restart
+
+```
+sudo systemctl restart docker
+```
+
+Install NVIDIA device plugin on master node
+```
+sudo kubectl apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.9.0/nvidia-device-plugin.yml
+```
+
