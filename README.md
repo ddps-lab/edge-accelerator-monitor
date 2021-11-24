@@ -56,7 +56,7 @@ sudo kubeadm token create --print-join-command
 Join the cluster using the token value from the worker node.
 
 ```
-sudo kubeadm join 192.168.0.5:6443 --token [token data] --discovery-token-ca-cert-hash [token hash data]
+sudo kubeadm join [master ip : port] --token [token data] --discovery-token-ca-cert-hash [token hash data]
 ```
 
 In Google Coral TPU device, execute join after setting cgroup memory.
