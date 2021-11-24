@@ -6,5 +6,5 @@ Those files are a script file and Dockerfile for extracting hardware information
 (NVIDIA Jetson : GPU model, GPU driver, GPU resource check method, Google Coral TPU : GPU model, Vendor id, Product id)
 
 ```
-docker build -t [docker image name] .
+docker pull kmubigdata/edge-accelerator-monitor
 ```
