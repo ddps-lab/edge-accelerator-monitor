@@ -1,4 +1,4 @@
-# Kubernetes Daemonset, ServiceAccount
+# Kubernetes ServiceAccount, Daemonset
 
 Manage kubernetes clustered hardware device nodes.    
 Hardware information extraction and automatic labeling.
